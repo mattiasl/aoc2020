@@ -3,13 +3,12 @@ from utils.file import read_file
 
 
 def a(i, dx, dy):
-    trees, x = 0, 0
-    for y in range(dy, len(i), dy):
-        x = (x + dx) % len(i[0])
-        if i[y][x] == '#':
-            trees += 1
+    def xg(mx=len(i[0]), x=0):
+        while True:
+            x = (x + dx) % mx
+            yield x
 
-    return trees
+    return reduce(lambda c, v: c + v, map(lambda c: c, [1 if i[y][x] == '#' else 0 for y, x in zip(range(dy, len(i), dy), xg())]))
 
 
 def b(i, slopes):
