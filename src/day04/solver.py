@@ -7,7 +7,7 @@ def to_dict(passport):
     return dict(p.split(':') for p in passport)
 
 
-def verify_passport_a(passport, val):
+def verify_passport_a(passport, val=['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']):
     return all(p in passport.keys() for p in val)
 
 
@@ -20,8 +20,7 @@ def to_passports(batch):
 
 
 def star_a(passports):
-    val = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
-    return reduce(lambda c, v: c + v, map(lambda p: verify_passport_a(p, val), passports))
+    return reduce(lambda c, v: c + v, map(verify_passport_a, passports))
 
 
 def star_b(passports):
