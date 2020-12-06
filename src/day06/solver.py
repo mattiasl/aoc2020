@@ -1,22 +1,16 @@
 from utils.file import read_file
-from functools import reduce
-from collections import Counter
 
 
 def parse(i):
-    return list(map(lambda x: x.split('\n'), i))
+    return map(lambda x: x.split(), i)
 
 
 def star_a(groups):
-    return sum(map(lambda x: len(reduce(lambda a, v: a | set(list(v)), x, set())), groups))
-
-
-def count_questions_everybody_answered_yes(s):
-    return len(list(filter(lambda a: a == len(s), reduce(lambda a, v: a + Counter(v), s, Counter({})).values())))
+    return sum(map(lambda x: len(set.union(*[set(s) for s in x])), groups))
 
 
 def star_b(groups):
-    return reduce(lambda a, v: a + v, map(count_questions_everybody_answered_yes, groups))
+    return sum(map(lambda x: len(set.intersection(*[set(s) for s in x])), groups))
 
 
 data = read_file('day06/1.in').split('\n\n')
