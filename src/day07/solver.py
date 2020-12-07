@@ -17,15 +17,8 @@ def parse(rules):
     return answer
 
 
-def can_hold_gold_bag(bag, bags):
-    answer = False
-    for candidate in bags[bag]:
-        if candidate[1] == 'shiny gold bags':
-            answer = True
-        else:
-            answer |= can_hold_gold_bag(candidate[1], bags)
-
-    return answer
+def can_hold_gold_bag(b, bags):
+    return reduce(lambda a, v: True if v[1] == 'shiny gold bags' else a | can_hold_gold_bag(v[1], bags), bags[b], False)
 
 
 def count_bags_in_bag(bag, bags):
