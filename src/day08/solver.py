@@ -5,11 +5,13 @@ def compile_source(source):
     return list(map(lambda split: {'op': split[0], 'arg': int(split[1])}, [i.split() for i in source]))
 
 
-def run(program, ops):
+def run(program, ops, patch=None):
     pointer, acc, visited = 0, 0, set()
     while pointer not in visited and pointer < len(program):
         visited.add(pointer)
         op, arg = program[pointer].values()
+        if patch is not None and pointer == patch['line_number']:
+            op = patch['op']
         acc, jump = ops[op](arg, acc)
         pointer += jump
 
@@ -22,10 +24,8 @@ def star_a(program):
 
 def star_b(program, corrupt_instructions={'nop': 'jmp', 'jmp': 'nop'}):
     for instruction in filter(lambda i: program[i]['op'] in corrupt_instructions.keys(), range(len(program))):
-        patched_program = program.copy()
-        patched_program[instruction] = program[instruction].copy()
-        patched_program[instruction]['op'] = corrupt_instructions[program[instruction]['op']]
-        success, result = run(patched_program, operations)
+        patch = {'line_number': instruction, 'op': corrupt_instructions[program[instruction]['op']]}
+        success, result = run(program, operations, patch)
         if success:
             return result
 
