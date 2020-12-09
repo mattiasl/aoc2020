@@ -1,21 +1,20 @@
-from itertools import permutations
+from itertools import combinations
 from utils.file import read_file
 
 
 def star_a(d, preamble=25):
     q = [int(i) for i in d]
-    for i in range(preamble, len(q)):
-        if q[i] not in set(map(sum, (permutations(q[i-preamble:i], 2)))):
-            return q[i]
+    for start, end in [(i-preamble, i) for i in range(preamble, len(q))]:
+        if q[end] not in set(map(sum, (combinations(q[start:end], 2)))):
+            return q[end]
 
 
-def star_b(d, magic_number):
+def star_b(d, target):
     q = [int(i) for i in d]
     for preamble in range(2, len(q)):
-        for i in range(preamble, len(q)):
-            candidates = q[i-preamble:i]
-            if sum(candidates) == magic_number:
-                return min(candidates) + max(candidates)
+        for numbers in [q[start:end] for start, end in [(i-preamble, i) for i in range(preamble, len(q))]]:
+            if sum(numbers) == target:
+                return min(numbers) + max(numbers)
 
 
 data = read_file('day09/1.in').splitlines()
