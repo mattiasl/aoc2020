@@ -12,7 +12,7 @@ def star_a(d, preamble=25):
 def star_b(d, target):
     q = [int(i) for i in d]
     for preamble in range(2, len(q)):
-        for numbers in [q[start:end] for start, end in [(i-preamble, i) for i in range(preamble, len(q))]]:
+        for numbers in [q[start:end] for start, end in [(i, i+preamble) for i in range(0, len(q)-preamble)]]:
             if sum(numbers) == target:
                 return min(numbers) + max(numbers)
 

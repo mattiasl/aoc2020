@@ -10,7 +10,7 @@ def run(program, ops, patch=None):
     while pointer not in visited and pointer < len(program):
         visited.add(pointer)
         op, arg = program[pointer].values()
-        if patch is not None and pointer == patch['line_number']:
+        if patch and pointer == patch['line_number']:
             op = patch['op']
         acc, jump = ops[op](arg, acc)
         pointer += jump
