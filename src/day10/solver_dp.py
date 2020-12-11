@@ -1,6 +1,6 @@
 import time
-from functools import reduce
 from collections import Counter
+from functools import reduce
 from utils.file import read_file
 
 
@@ -15,22 +15,16 @@ def star_a(adapters):
 
 
 def star_b(adapters):
-    answer = 1
-    diff = [x - y for y, x in zip(adapters[:-1], adapters[1:])]
-    i = 0
-    while i < len(diff):
-        perm, jmp = 1, 1
-        if diff[i:i + 4] == [1, 1, 1, 1]:
-            perm, jmp = 7, 3
-        elif diff[i:i + 3] == [1, 1, 1]:
-            perm, jmp = 4, 2
-        elif diff[i:i + 2] == [1, 1]:
-            perm = 2
+    p = [0] * len(adapters)
+    p[0] = 1
+    for i, a, b, c in [(i, i - 1, i - 2, i - 3) for i in range(1, len(adapters))]:
+        p[i] = p[a]
+        if adapters[i] - adapters[b] <= 2:
+            p[i] += p[b]
+        if adapters[i] - adapters[c] <= 3:
+            p[i] += p[c]
 
-        answer *= perm
-        i += jmp
-
-    return answer
+    return p[-1]
 
 
 data = add_zero_and_max_then_sort(list(map(int, read_file('day10/1.in').splitlines())))
