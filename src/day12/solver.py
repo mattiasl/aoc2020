@@ -1,6 +1,6 @@
-from utils.file import read_file
 import re
-from functools import reduce
+
+from utils.file import read_file
 
 
 def mhd(ship_pos):
@@ -12,7 +12,7 @@ def star_a(navigation_instructions, ship_dir, ship_pos=complex(0, 0)):
         if cmd in dirs.keys():
             ship_pos += dirs[cmd] * arg
         elif cmd in rotations.keys():
-            ship_dir = reduce(lambda a, _: a * rotations[cmd], range(int(arg / 90)), ship_dir)
+            ship_dir *= rotations[cmd] ** int(arg / 90)
         else:
             ship_pos += ship_dir * arg
     return mhd(ship_pos)
@@ -23,7 +23,7 @@ def star_b(navigation_instructions, waypoint, ship_pos=complex(0, 0)):
         if cmd in dirs.keys():
             waypoint += dirs[cmd] * arg
         elif cmd in rotations.keys():
-            waypoint = reduce(lambda a, _: a * rotations[cmd], range(int(arg / 90)), waypoint)
+            waypoint *= rotations[cmd] ** int(arg / 90)
         else:
             ship_pos += waypoint * arg
     return mhd(ship_pos)
