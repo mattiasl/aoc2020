@@ -4,18 +4,15 @@ import time
 
 def star_a(numbers, target):
     all_spoken = {}
-    for turn, number in enumerate(numbers):
-        all_spoken[number] = turn + 1
+    for turn, number in enumerate(numbers, 1):
+        all_spoken[number] = turn
 
     most_recently_spoken = numbers[-1]
     for turn in range(len(all_spoken), target):
         if most_recently_spoken not in all_spoken.keys():
-            all_spoken[most_recently_spoken] = turn
-            most_recently_spoken = 0
+            all_spoken[most_recently_spoken], most_recently_spoken = turn, 0
         else:
-            last_spoken_at_turn = all_spoken[most_recently_spoken]
-            all_spoken[most_recently_spoken] = turn
-            most_recently_spoken = turn - last_spoken_at_turn
+            all_spoken[most_recently_spoken], most_recently_spoken = turn, turn - all_spoken[most_recently_spoken]
 
     return most_recently_spoken
 
