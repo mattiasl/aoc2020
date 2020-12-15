@@ -1,7 +1,7 @@
 from utils.file import read_file
 import re
-from functools import reduce
 import itertools
+import time
 
 
 def get_as_binary(x):
@@ -25,7 +25,7 @@ def star_a(program):
             m = re.search('mem\\[([0-9]+)] = (.*)', line)
             address, value = m.group(1), m.group(2)
             mem[address] = int(''.join(apply_mask_a(mask, get_as_binary(int(value)))), 2)
-    return reduce(lambda a, v: a + v, mem.values())
+    return sum(mem.values())
 
 
 def get_addresses(result):
@@ -57,8 +57,12 @@ def star_b(program):
             result = apply_mask_b(mask, get_as_binary(address))
             for address in get_addresses(result):
                 mem[address] = value
-    return reduce(lambda a, v: a + v, mem.values())
+    return sum(mem.values())
 
 
 data = read_file('day14/1.in').splitlines()
+
+start = time.time()
 print(star_a(data), star_b(data))
+end = time.time()
+print(end - start)
