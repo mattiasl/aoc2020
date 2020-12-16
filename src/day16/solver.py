@@ -33,24 +33,20 @@ def star_b(notes):
     my_ticket = list(map(int, notes[1].splitlines()[1].split(',')))
     nearby_tickets = [list(map(int, nearby_ticket.split(','))) for nearby_ticket in notes[2].splitlines()[1:]]
 
-    valid_ticket_transposed = list(zip(*filter(lambda ticket: is_valid(list(ticket), rules), nearby_tickets)))
+    valid_ticket_transposed = list(zip(*filter(lambda ticket: is_valid(ticket, rules), nearby_tickets)))
 
     rules_matching_all_entries_per_col = []
     for values_for_a_col in valid_ticket_transposed:
         matches_per_rule = set()
-        for i, rule in enumerate(rules):
-            if reduce(lambda a, v: a & rule(v), values_for_a_col, True):
-                matches_per_rule.add(i)
+        for rule_idx in [i for i, rule in enumerate(rules) if reduce(lambda a, v: a & rule(v), values_for_a_col, True)]:
+            matches_per_rule.add(rule_idx)
         rules_matching_all_entries_per_col.append(matches_per_rule)
 
     mapping = {}
     while len(mapping) < len(rules):
-        for i, s in enumerate(rules_matching_all_entries_per_col):
-            if len(s) == 1:
-                val = s.pop()
-                mapping[val] = i
-                remove_value_from_sets(rules_matching_all_entries_per_col, val)
-                break
+        for i, val in [(i, s.pop()) for i, s in enumerate(rules_matching_all_entries_per_col) if len(s) == 1]:
+            mapping[val] = i
+            remove_value_from_sets(rules_matching_all_entries_per_col, val)
 
     answer = 1
     for col in [i for i, row in enumerate(notes[0].splitlines()) if row.startswith('departure')]:
