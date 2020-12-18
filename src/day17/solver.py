@@ -11,6 +11,22 @@ def get_neighbors(cube, dimension):
     return answer
 
 
+def cycle(active_cubes, dimension):
+    answer = set()
+    inactive_neigbor_cubes = set()
+    for cube in active_cubes:
+        neighbors = get_neighbors(cube, dimension)
+        if len(active_cubes.intersection(neighbors)) in [2, 3]:
+            answer.add(cube)
+        inactive_neigbor_cubes |= (neighbors - active_cubes)
+
+    for inactive_cube in inactive_neigbor_cubes:
+        if len(active_cubes.intersection(get_neighbors(inactive_cube, dimension))) == 3:
+            answer.add(inactive_cube)
+
+    return answer
+
+
 def solve(initial_state, dimension, cycles=6):
     zeros = [0] * (dimension - 2)
     active_cubes = set()
@@ -18,20 +34,8 @@ def solve(initial_state, dimension, cycles=6):
         for x in [x for x, c in enumerate(list(row)) if c == '#']:
             active_cubes.add((x, y, *zeros))
 
-    for cycle in range(cycles):
-        next_cycle_active_cubes = set()
-        inactive_cubes = set()
-        for cube in active_cubes:
-            neighbors = get_neighbors(cube, dimension)
-            if len(active_cubes.intersection(neighbors)) in [2, 3]:
-                next_cycle_active_cubes.add(cube)
-            inactive_cubes |= (neighbors - active_cubes)
-
-        for inactive_cube in inactive_cubes:
-            if len(active_cubes.intersection(get_neighbors(inactive_cube, dimension))) == 3:
-                next_cycle_active_cubes.add(inactive_cube)
-
-        active_cubes = next_cycle_active_cubes
+    for _ in range(cycles):
+        active_cubes = cycle(active_cubes, dimension)
 
     return len(active_cubes)
 
