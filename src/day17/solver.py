@@ -6,7 +6,7 @@ from operator import add
 def get_neighbors(cube, dimension):
     answer = set()
     for d in itertools.product([-1, 0, 1], repeat=dimension):
-        answer.add(tuple(list(map(add, cube, d))))
+        answer.add(tuple(map(add, cube, d)))
     answer.remove(cube)
     return answer
 
