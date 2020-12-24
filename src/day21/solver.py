@@ -9,7 +9,7 @@ def find_possible_ingredients(allergen, foods):
     return set.intersection(*answer)
 
 
-def solve(inp):
+def parse(inp):
     allergens = set()
     foods = {}
     for i, food in enumerate(inp):
@@ -19,15 +19,19 @@ def solve(inp):
         foods[current_ingredients] = current_allergens
         allergens.update(current_allergens)
 
-    resolved_ingredient = set()
+    return allergens, foods
+
+
+def solve(inp):
+    allergens, foods = parse(inp)
+
     allergen_to_ingredient_map = {}
-    while len(resolved_ingredient) < len(allergens):
+    while len(allergen_to_ingredient_map) < len(allergens):
         for allergen in allergens:
-            possible_candidates = find_possible_ingredients(allergen, foods) - resolved_ingredient
+            possible_candidates = find_possible_ingredients(allergen, foods) - set(allergen_to_ingredient_map.values())
             if len(possible_candidates) == 1:
                 ingredient = possible_candidates.pop()
                 allergen_to_ingredient_map[allergen] = ingredient
-                resolved_ingredient.add(ingredient)
 
     part1 = 0
     for current_ingredients in foods.keys():
