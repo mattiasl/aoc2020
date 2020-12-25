@@ -1,5 +1,4 @@
 from utils.file import read_file
-import time
 
 
 def star_a(numbers, target):
@@ -18,7 +17,4 @@ def star_a(numbers, target):
 
 
 data = list(map(int, read_file('day15/1.in').split(',')))
-start = time.time()
 print(star_a(data, 2020), star_a(data, 30000000))
-end = time.time()
-print(end - start)

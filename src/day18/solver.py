@@ -32,8 +32,7 @@ def evaluate(exp, inner_exp_evaluator):
 
 def solve(inp, ev_fn):
     answer = 0
-    for row in inp:
-        row = re.sub(r'\s+', '', row)
+    for row in [re.sub(r'\s+', '', row) for row in inp]:
         answer += int(evaluate(row, ev_fn))
     return answer
 

@@ -32,8 +32,6 @@ def star_b(notes):
         else:
             departures_and_offsets.append(dep)
 
-    print(departures_and_offsets)
-
     time, current_cycle = departures_and_offsets[0], departures_and_offsets[0]
     departure_offset = 1
     for departure in departures_and_offsets[1:]:

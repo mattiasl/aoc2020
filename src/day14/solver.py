@@ -1,7 +1,6 @@
 from utils.file import read_file
 import re
 import itertools
-import time
 
 
 def get_as_binary(x):
@@ -62,7 +61,5 @@ def star_b(program):
 
 data = read_file('day14/1.in').splitlines()
 
-start = time.time()
 print(star_a(data), star_b(data))
-end = time.time()
-print(end - start)
+
