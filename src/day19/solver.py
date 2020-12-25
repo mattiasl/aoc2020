@@ -4,6 +4,8 @@ from functools import reduce
 
 
 def gen_regex(rule, rules, recur, max_recur=6):
+    """Started with max_recur 10 and it gave the correct answer, then it was a matter of binary search until 6 was found
+    to be the minimum max_recur that provides the correct answer"""
     if rule in recur.keys():
         if recur[rule] < max_recur:
             recur[rule] += 1
