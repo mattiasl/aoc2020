@@ -11,12 +11,16 @@ mapper = {
 }
 
 
+def add_tiles(a, b):
+    return tuple(map(lambda x, y: x + y, a, b))
+
+
 def star_a(inp):
     blacks = set()
     for tile in inp:
         current = (0, 0, 0)
         for move in map(lambda d: mapper[d], re.findall('(se|sw|ne|nw|e|w)', tile)):
-            current = tuple(map(lambda x, y: x + y, current, move))
+            current = add_tiles(current, move)
         if current not in blacks:
             blacks.add(current)
         else:
@@ -25,14 +29,13 @@ def star_a(inp):
     return blacks
 
 
-def get_adjacent_tiles(tile):
-    answer = set()
-    for adjacent in mapper.values():
-        answer.add(tuple(map(lambda x, y: x + y, tile, adjacent)))
-    return answer
-
-
 def star_b(blacks, days=100):
+    def get_adjacent_tiles(tile):
+        answer = set()
+        for offset in mapper.values():
+            answer.add(add_tiles(tile, offset))
+        return answer
+
     for _ in range(days):
         new_blacks = set()
         for black in blacks:
@@ -40,16 +43,15 @@ def star_b(blacks, days=100):
             adjacent_blacks = blacks.intersection(adjacent)
             if len(adjacent_blacks) in [1, 2]:
                 new_blacks.add(black)
-            adjacent_whites = adjacent - blacks
-            for adjacent_white in adjacent_whites:
+            for adjacent_white in adjacent - blacks:
                 if len(get_adjacent_tiles(adjacent_white).intersection(blacks)) == 2:
                     new_blacks.add(adjacent_white)
 
         blacks = new_blacks
 
-    return len(blacks)
+    return blacks
 
 
 data = read_file('day24/1.in').splitlines()
-print(len(star_a(data)), star_b(star_a(data)))
+print(len(star_a(data)), len(star_b(star_a(data))))
 
