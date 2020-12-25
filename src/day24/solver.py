@@ -38,14 +38,17 @@ def star_b(blacks, days=100):
 
     for _ in range(days):
         new_blacks = set()
+        adjacent_whites = set()
         for black in blacks:
             adjacent = get_adjacent_tiles(black)
             adjacent_blacks = blacks.intersection(adjacent)
             if len(adjacent_blacks) in [1, 2]:
                 new_blacks.add(black)
-            for adjacent_white in adjacent - blacks:
-                if len(get_adjacent_tiles(adjacent_white).intersection(blacks)) == 2:
-                    new_blacks.add(adjacent_white)
+            adjacent_whites |= adjacent
+
+        for adjacent_white in adjacent_whites-blacks:
+            if len(get_adjacent_tiles(adjacent_white).intersection(blacks)) == 2:
+                new_blacks.add(adjacent_white)
 
         blacks = new_blacks
 
